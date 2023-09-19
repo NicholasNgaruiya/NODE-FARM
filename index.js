@@ -32,6 +32,9 @@ console.log("Will read file!");
 */
 //////////////?
 //////?SERVER
+//using blocking so that the code can be read only once at the beginning instead of everytime as is the case of non-blocking
+const data = fs.readFileSync(`${__dirname}/dev-data/data.json`, "utf-8");
+const dataObj = JSON.parse(data);
 
 const server = http.createServer((req, res) => {
   // console.log(req.url);
@@ -41,14 +44,8 @@ const server = http.createServer((req, res) => {
   } else if (pathName === "/product") {
     res.end("This is the PRODUCT");
   } else if (pathName === "/api") {
-    fs.readFile(`${__dirname}/dev-data/data.json`, "utf-8", (err, data) => {
-      const productData = JSON.parse(data);
-      // console.log(productData);
-      url.writeHead(200, {
-        "content-type": "application/json",
-      });
-      res.end(data);
-    });
+    res.writeHead(200, { "content-type": "application/json" });
+    res.end(data);
   } else {
     res.writeHead(404, {
       "content-type": "text/html",
