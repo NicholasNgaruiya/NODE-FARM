@@ -1,7 +1,7 @@
 const fs = require("fs");
 const http = require("http");
 const url = require("url");
-
+/*
 ////////////////////////?
 ////////?FILES
 
@@ -29,7 +29,7 @@ fs.readFile("./txt/start.txt", "utf-8", (err, data1) => {
   });
 });
 console.log("Will read file!");
-
+*/
 //////////////?
 //////?SERVER
 
@@ -40,6 +40,15 @@ const server = http.createServer((req, res) => {
     res.end("This is the OVERVIEW");
   } else if (pathName === "/product") {
     res.end("This is the PRODUCT");
+  } else if (pathName === "/api") {
+    fs.readFile(`${__dirname}/dev-data/data.json`, "utf-8", (err, data) => {
+      const productData = JSON.parse(data);
+      // console.log(productData);
+      url.writeHead(200, {
+        "content-type": "application/json",
+      });
+      res.end(data);
+    });
   } else {
     res.writeHead(404, {
       "content-type": "text/html",
