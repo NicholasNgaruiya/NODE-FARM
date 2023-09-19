@@ -11,3 +11,19 @@ console.log(textInput);
 const textOutput = `This is a fact about avocados: ${textInput}.\nCreated on ${Date.now()}`;
 fs.writeFileSync("./txt/input.txt", textOutput);
 console.log("The file has been written!");
+
+//?NON_BLOCKING: Asynchronous way - using callbacks ,hence making code fast
+//TODO:Solve Callback Hell
+fs.readFile("./txt/start.txt", "utf-8", (err, data1) => {
+  if (err) return console.log("An error occured");
+  fs.readFile(`./txt/${data1}.txt`, "utf-8", (err, data2) => {
+    console.log(data2);
+    fs.readFile("./txt/append.txt", "utf-8", (err, data3) => {
+      console.log(data3);
+      fs.writeFile("./txt/final.txt", `${data1}\n${data2}`, "utf-8", (err) => {
+        console.log("You'r file has been written");
+      });
+    });
+  });
+});
+console.log("Will read file!");
