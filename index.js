@@ -54,10 +54,12 @@ const dataObj = JSON.parse(data);
 
 const server = http.createServer((req, res) => {
   // console.log(req.url);
-  const pathName = req.url;
+  // console.log(url.parse(req.url,true));
+  //?using destructuring assignment
+  const { query, pathname } = url.parse(req.url,true);
 
   //overview
-  if (pathName === "/" || pathName === "/overview") {
+  if (pathname === "/" || pathname === "/overview") {
     res.writeHead(200, { "content-type": "text/html" });
     //using map() to iterate
     const cardHtml = dataObj.map(el => replaceTemplate(tempCard, el)).join('');
@@ -66,11 +68,14 @@ const server = http.createServer((req, res) => {
     res.end(output);
 
     //product
-  } else if (pathName === "/product") {
-    res.end("This is the PRODUCT");
+  } else if (pathname === "/product") {
+    res.writeHead(200, { 'content-type': 'text/html' });
+    const product = dataObj[query.id];
+    output = replaceTemplate(tempProduct,product);
+    res.end(output);
 
     //api
-  } else if (pathName === "/api") {
+  } else if (pathname === "/api") {
     res.writeHead(200, { "content-type": "application/json" });
     res.end(data);
 
